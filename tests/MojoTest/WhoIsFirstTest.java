@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import val.Mojo;
 
-public class WhoIsFirstTest {
+class WhoIsFirstTest {
 
     private Mojo mojo;
 

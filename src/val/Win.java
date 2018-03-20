@@ -1,5 +1,5 @@
 package val;
 
-public interface Win {
+interface Win {
     String check();
 }

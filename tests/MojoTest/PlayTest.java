@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PlayTest {
+class PlayTest {
 
     private Mojo mojo;
 
@@ -21,35 +21,35 @@ public class PlayTest {
 
     @Test
     void play_WrongFigureColour_Exception(){
-        Executable exec = ()->{mojo.play("en", 1, 2,3);};
+        Executable exec = ()-> mojo.play("en", 1, 2,3);
         assertThrows(WrongFigureRuntimeException.class,
                 exec);
     }
 
     @Test
     void play_WrongFigureName_Exception(){
-        Executable exec = ()->{mojo.play("Green **", 1, 2,3);};
+        Executable exec = ()-> mojo.play("Green **", 1, 2,3);
         assertThrows(WrongFigureRuntimeException.class,
                 exec);
     }
 
     @Test
     void play_WrongFigureDots_Exception(){
-        Executable exec = ()->{mojo.play("Green", 0, 2,3);};
+        Executable exec = ()-> mojo.play("Green", 0, 2,3);
         assertThrows(WrongFigureRuntimeException.class,
                 exec);
     }
 
     @Test
     void play_WrongFigureDots_Exception_2(){
-        Executable exec = ()->{mojo.play("Green", 4, 2,3);};
+        Executable exec = ()-> mojo.play("Green", 4, 2,3);
         assertThrows(WrongFigureRuntimeException.class,
                 exec);
     }
 
     @Test
     void play_WrongFigureDots_Exception_3(){
-        Executable exec = ()->{mojo.play("Green", 10, 2,3);};
+        Executable exec = ()-> mojo.play("Green", 10, 2,3);
         assertThrows(WrongFigureRuntimeException.class,
                 exec);
     }
@@ -319,5 +319,25 @@ public class PlayTest {
 
         mojo.play("Red", 2, 3, 2);
         assertEquals(0, msg.size());
+    }
+
+    @Test
+    void play_NoWinnerWin_ReturnNull(){
+        mojo.setFigureOnBoard("Red", 2, 2,1);
+        mojo.setFigureOnBoard("Red", 4, 2,2);
+        mojo.setFigureOnBoard("Red", 6, 3,3);
+
+        assertEquals(null, mojo.play("Red", 2, 3, 2));
+
+    }
+
+    @Test
+    void play_GreenWin_ReturnGreen(){
+        mojo.setFigureOnBoard("Green", 1, 1,3);
+        mojo.setFigureOnBoard("Green", 3, 2,3);
+        mojo.setFigureOnBoard("Green", 5, 3,2);
+        mojo.play("Green", 3, 2, 2);
+
+        assertEquals("Green", mojo.play("Green", 5, 3, 1));
     }
 }

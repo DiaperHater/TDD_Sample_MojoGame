@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Mojo {
     private final int BOARD_SIZE = 3;
-    private String[][] board;
+    private final String[][] board;
     private final String[] allPlayers = {"Green", "Red"};
 
     {
@@ -27,7 +27,7 @@ public class Mojo {
 
         return (greenOrRed ? "Green" : "Red");
     }
-    public void setFigureOnBoard(String figure, int dots, int posX, int posY) {
+    public String setFigureOnBoard(String figure, int dots, int posX, int posY) {
         posX = posX-1;
         posY = posY-1;
 
@@ -43,16 +43,19 @@ public class Mojo {
 
         if(isAllSet()){
             System.out.println("All cells is set!");
+            return "All set!";
         }
+
+        return null;
     }
-    public void play(String figure, int dots, int posX, int posY) {
+    public String play(String figure, int dots, int posX, int posY) {
         posX = posX-1;
         posY = posY-1;
 
         checkFigure(figure, dots);
 
         if (isMoveForbidden(figure, dots, posX, posY)){
-            return;
+            return null;
         }
 
         int[] pos;
@@ -64,7 +67,7 @@ public class Mojo {
         board[posX][posY] = formatFigure(figure, dots);
 
 
-        checkWin();
+        return getWinner();
 
     }
 
@@ -82,6 +85,10 @@ public class Mojo {
         return count == 8;
     }
     private void setCell(String figure, int dots, int posX, int posY) {
+        if(figure.contains("Pawn")){
+            board[posX][posY] = figure;
+            return;
+        }
         board[posX][posY] = formatFigure(figure, dots);
     }
     private String formatFigure(String figure, int dots) {
@@ -95,7 +102,7 @@ public class Mojo {
         return figure + (figure.contains("Pawn") ? "" : "|") + d;
     }
     private boolean isCellOccupied(int posX, int posY) {
-        return board[posX][posY].equals("") ? false : true;
+        return !board[posX][posY].equals("");
     }
     private void checkBounds(int posX, int posY) {
         if(posX > BOARD_SIZE-1 || posX < 0
@@ -132,12 +139,6 @@ public class Mojo {
             }
         }
     }
-    private void checkWin() {
-        String winner = getWinner();
-        if (winner != null) {
-            System.out.println(winner + " Win!!!");
-        }
-    }
     private String getWinner() {
 
         Win[] possibleWins = new Win[]{
@@ -149,6 +150,7 @@ public class Mojo {
         String winner;
         for (Win win : possibleWins){
             if( (winner = win.check()) != null ){
+                System.out.println(winner + " Win!!!");
                 return winner;
             }
 
@@ -279,10 +281,7 @@ public class Mojo {
                         && board[x][y].equals(formattedFigure)){
                     int diffX = Math.abs( x - posX );
                     int diffY = Math.abs( y - posY );
-                    if( (diffX > 1) || (diffY > 1) ){
-                        return true;
-                    }
-                    return false;
+                    return (diffX > 1) || (diffY > 1);
                 }
             }
         }
